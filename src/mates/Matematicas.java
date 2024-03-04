@@ -2,40 +2,39 @@ package mates;
 
 import java.util.Random;
 
-/**
- * Clase que contiene métodos matemáticos, incluyendo la aproximación de Pi
- * mediante el método de Montecarlo.
- */
 public class Matematicas {
 
     /**
-     * Genera una aproximación al número Pi mediante el método de Montecarlo.
+     * Genera una aproximación al número Pi mediante el método de Montecarlo de forma recursiva.
+     * El parámetro `pasos` indica el número de puntos generados.
      *
-     * @param pasos El número de puntos generados para la aproximación.
-     * @return Una aproximación del valor de Pi.
+     * @param pasos Número de puntos generados para la aproximación.
+     * @return Aproximación al número Pi.
      */
-    public static double generarNumeroPiIterativo(long pasos) {
-        long puntosDentroCirculo = 0;
+    public static double generarNumeroPiRecursivo(long pasos) {
+        return generarNumeroPiRecursivoAux(pasos, 0, 0, new Random());
+    }
 
-        // Se utiliza la clase Random para generar puntos aleatorios.
-        Random random = new Random();
-
-        for (long i = 0; i < pasos; i++) {
-            double x = random.nextDouble();
-            double y = random.nextDouble();
-
-            // Calcula la distancia al centro del círculo.
-            double distanciaAlCentro = x * x + y * y;
-
-            // Verifica si el punto está dentro del círculo.
-            if (distanciaAlCentro <= 1) {
-                puntosDentroCirculo++;
-            }
+    private static double generarNumeroPiRecursivoAux(long pasos, long puntosDentroCirculo, long pasosActuales, Random random) {
+        // Caso base: Se han generado todos los puntos o se alcanzó el límite de pasos.
+        if (pasosActuales == pasos) {
+            return 4.0 * puntosDentroCirculo / pasos;
         }
 
-        // La fórmula para aproximar Pi mediante Montecarlo.
-        double piAproximado = 4.0 * puntosDentroCirculo / pasos;
+        // Generar un punto aleatorio.
+        double x = random.nextDouble();
+        double y = random.nextDouble();
 
-        return piAproximado;
+        // Calcular la distancia al centro del círculo.
+        double distanciaAlCentro = x * x + y * y;
+
+        // Verificar si el punto está dentro del círculo.
+        if (distanciaAlCentro <= 1) {
+            puntosDentroCirculo++;
+        }
+
+        // Llamada recursiva con el siguiente paso.
+        return generarNumeroPiRecursivoAux(pasos, puntosDentroCirculo, pasosActuales + 1, random);
     }
 }
+
